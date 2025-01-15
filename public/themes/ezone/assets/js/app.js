@@ -228,3 +228,43 @@ function getQuickView(product_slug) {
         });
     });
 })(jQuery);
+
+$(document).on("click", ".btn-qty", function (e) {
+    e.preventDefault();
+
+    // Ambil informasi produk dan quantity
+    var button = $(this);
+    var input = button.siblings(".qty-input");
+    var qty = parseInt(input.val());
+    var productId = button.data("productid");
+
+    // Tentukan tindakan (tambah atau kurang)
+    if (button.hasClass("increase")) {
+        qty++;
+    } else if (button.hasClass("decrease")) {
+        qty = qty > 1 ? qty - 1 : 1; // Minimal quantity 1
+    }
+
+    // Update input dengan nilai baru
+    input.val(qty);
+
+    // Kirim permintaan AJAX untuk memperbarui keranjang
+    $.ajax({
+        type: "POST",
+        url: "/carts/update",
+        data: {
+            _token: $('meta[name="csrf-token"]').attr("content"),
+            productId,
+            qty
+        },
+        success: function (response) {
+            location.reload(true);
+            Swal.fire({
+                title: "Jumlah Produk",
+                text: "Berhasil diubah!",
+                icon: "success",
+                confirmButtonText: "Close",
+            });
+        },
+    });
+});

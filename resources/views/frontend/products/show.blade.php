@@ -70,9 +70,19 @@
 					<div class="product-details-content">
 						<h3>{{ $product->name }}</h3>
 						<div class="details-price">
-							<span>IDR {{ number_format($product->priceLabel()) }}.00</span>
-							<span class="original-price">IDR{{ number_format($product->priceLabel() + 23000, 0, ",", ".") }},00</span>
-						</div>
+                            @if(!empty($product->final_price) && $product->final_price < $product->price)
+                                <span>
+                                    IDR {{ number_format($product->final_price, 0, ",", ".") }}
+                                </span>
+                                <span class="original-price" style="text-decoration: line-through; color: #a9a9a9;">
+                                    IDR {{ number_format($product->price, 0, ",", ".") }}
+                                </span>
+                            @else
+                                <span>
+                                    IDR {{ number_format($product->price, 0, ",", ".") }}
+                                </span>
+                            @endif
+                        </div>
 						<div class="rating">
                                 <i class="fas fa-star"></i>
                                 <i class="fas fa-star"></i>
@@ -127,7 +137,7 @@
 								@endforeach
 							</ul>
 							<ul>
-								<li class="categories-title">Save to Wishlist :</li>
+								<li class="categories-title">Simpan ke Wishlist :</li>
 								<li class="product-list-wishlist">
                                                             <a class="btn-hover list-btn-wishlist add-to-fav" title="Wishlist"  product-slug="{{ $product->slug }}" href="">
                                                                 <i class="pe-7s-like"></i>
@@ -171,10 +181,10 @@
 			<div class="product-description-review text-center">
 				<div class="description-review-title nav" role=tablist>
 					<a class="active" href="#pro-dec" data-toggle="tab" role="tab" aria-selected="true">
-						Description
+						Deskripsi Produk
 					</a>
-					<a href="#pro-dec" data-toggle="tab" role="tab" aria-selected="false">
-						How To Use
+					<a href="#pro-sho-dec" data-toggle="tab" role="tab" aria-selected="false">
+						Indikasi Penggunaan
 					</a>
 					<!-- <a href="#pro-review" data-toggle="tab" role="tab" aria-selected="false">
 						Reviews (0)

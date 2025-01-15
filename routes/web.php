@@ -66,6 +66,10 @@ Route::group(['middleware' => 'auth'], function() {
     Route::get('orders/received/{orderId}', [\App\Http\Controllers\Frontend\OrderController::class, 'received']);
     Route::get('orders', [\App\Http\Controllers\Frontend\OrderController::class, 'index']);
     Route::get('orders/{orderId}', [\App\Http\Controllers\Frontend\OrderController::class, 'show']);
+    Route::get('orders/invoice/{orderId}', [\App\Http\Controllers\Frontend\OrderController::class, 'viewInvoice']);
+    Route::get('orders/invoice/{orderId}/generate', [\App\Http\Controllers\Frontend\OrderController::class, 'generateInvoice']);
+
+
     
     Route::resource('wishlists', \App\Http\Controllers\Frontend\WishListController::class)->only(['index','store','destroy']);
     
@@ -78,3 +82,5 @@ Route::post('payments/notification', [\App\Http\Controllers\Frontend\PaymentCont
 Route::get('payments/completed', [\App\Http\Controllers\Frontend\PaymentController::class, 'completed']);
 Route::get('payments/failed', [\App\Http\Controllers\Frontend\PaymentController::class, 'failed']);
 Route::get('payments/unfinish', [\App\Http\Controllers\Frontend\PaymentController::class, 'unfinish']);
+
+

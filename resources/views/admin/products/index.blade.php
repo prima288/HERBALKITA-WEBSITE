@@ -21,42 +21,54 @@
                     <tr>
                         <th>No</th>
                         <th>SKU</th>
-                        <th>Tipe</th>
                         <th>Nama Produk</th>
-                        <th>Harga</th>
+                        <th>Harga Asli</th>
+                        <th>Harga Setelah Diskon</th>
+                        <th>Diskon</th>
                         <th>Status</th>
                         <th>Action</th>
                     </tr>
                     </thead>
                     <tbody>
-                        @forelse($products as $product)
-                            <tr>
-                                <td>{{ $loop->iteration }}</td>
-                                <td>{{ $product->sku }}</td>
-                                <td>{{ $product->type }}</td>
-                                <td>{{ $product->name }}</td>
-                                <td>{{ number_format($product->price) }}</td>
-                                <td>{{ $product->statusLabel() }}</td>
-                                <td>
-                                <div class="btn-group btn-group-sm">
-                                    <a href="{{ route('admin.products.edit', $product) }}" class="btn btn-sm btn-primary">
-                                        <i class="fa fa-edit"></i>
-                                    </a>
-                                    <form onclick="return confirm('are you sure !')" action="{{ route('admin.products.destroy', $product) }}"
-                                        method="POST">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button class="btn btn-sm btn-danger" type="submit"><i class="fa fa-trash"></i></button>
-                                    </form>
-                                </div>
-                                </td>
-                            </tr>
-                        @empty
-                            <tr>
-                                <td colspan="7" class="text-center">Data Kosong !</td>
-                            </tr>
-                        @endforelse
-                        </tbody>
+                    <tbody>
+@forelse($products as $product)
+<tr>
+    <td>{{ $loop->iteration }}</td>
+    <td>{{ $product->sku }}</td>
+    <td>{{ $product->name }}</td>
+    <td>Rp {{ number_format($product->price) }}</td> <!-- Harga Asli -->
+    <td>Rp {{ number_format($product->final_price) }}</td> <!-- Harga Setelah Diskon -->
+    <td>
+        @if($product->discount_type == 'percentage')
+            {{ $product->discount_value }}%
+        @elseif($product->discount_type == 'fixed')
+            Rp {{ number_format($product->discount_value) }}
+        @else
+            -
+        @endif
+    </td>
+    <td>{{ $product->statusLabel() }}</td>
+    <td>
+        <div class="btn-group btn-group-sm">
+            <a href="{{ route('admin.products.edit', $product) }}" class="btn btn-sm btn-primary">
+                <i class="fa fa-edit"></i>
+            </a>
+            <form onclick="return confirm('Are you sure?')" action="{{ route('admin.products.destroy', $product) }}" method="POST">
+                @csrf
+                @method('DELETE')
+                <button class="btn btn-sm btn-danger" type="submit"><i class="fa fa-trash"></i></button>
+            </form>
+        </div>
+    </td>
+</tr>
+@empty
+<tr>
+    <td colspan="8" class="text-center">Data Kosong!</td>
+</tr>
+@endforelse
+</tbody>
+
+
                     </table>
                 </div>
               </div>

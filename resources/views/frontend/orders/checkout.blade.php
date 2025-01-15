@@ -12,7 +12,7 @@
 				<div class="col-lg-6 col-md-12 col-12">
 					<div class="checkbox-form">						
 						<h3>Informasi Pengiriman</h3>
-						<div class="row">
+						<div class="row-custom">
 							<div class="col-6">
 								<div class="checkout-form-list">
 									<label>Nama Pertama <span class="required">*</span></label>										
@@ -47,7 +47,7 @@
 									</select>
 								</div>
 							</div>
-							<div class="col-md-6">
+							<div class="col-md-12">
 								<div class="checkout-form-list">
 									<label>City<span class="required">*</span></label>	
 									<select name="shipping_city_id" id="shipping-city">
@@ -60,19 +60,19 @@
 									</select>
 								</div>
 							</div>
-							<div class="col-md-6">
+							<div class="col-md-12">
 								<div class="checkout-form-list">
 									<label>Kode Pos <span class="required">*</span></label>										
 									<input type="text" name="postcode" value="{{ old('postcode', auth()->user()->postcode) }}">
 								</div>
 							</div>
-							<div class="col-md-6">
+							<div class="col-md-12">
 								<div class="checkout-form-list">
 									<label>Nomor Telepon  <span class="required">*</span></label>										
 									<input type="text" name="phone" value="{{ old('phone', auth()->user()->phone) }}">
 								</div>
 							</div>
-							<div class="col-md-6">
+							<div class="col-md-12">
 								<div class="checkout-form-list">
 									<label>Email </label>										
 									<input type="text" name="email" value="{{ old('email', auth()->user()->email) }}">
@@ -87,8 +87,8 @@
 								</h3>
 							</div>
 							<div id="ship-box-info">
-								<div class="row">
-									<div class="col-md-6">
+							<div class="row-custom">
+							<div class="col-md-6">
 										<div class="checkout-form-list">
 											<label>Nama Pertama <span class="required">*</span></label>										
 											<input type="text" name="customer_first_name" value="{{ old('customer_first_name') }}">
@@ -170,46 +170,53 @@
 									</tr>							
 								</thead>
 								<tbody>
-									@forelse ($items as $item)
-										@php
-											$product = isset($item->model->parent) ? $item->model->parent : $item->model;
-											$image = !empty($product->productImages->first()) ? asset('storage/'.$product->productImages->first()->path) : asset('themes/ezone/assets/img/cart/3.jpg')
-										@endphp
-										<tr class="cart_item">
-											<td class="product-name">
-												{{ $item->name }}	<strong class="product-quantity"> × {{ $item->qty }}</strong>
-											</td>
-											<td class="product-total">
-												<span class="amount">Rp{{ $item->price * $item->qty }}</span>
-											</td>
-										</tr>
-									@empty
-										<tr>
-											<td colspan="2">Keranjang Kosong </td>
-										</tr>
-									@endforelse
-								</tbody>
-								<tfoot>
-									<tr class="cart-subtotal">
-										<th>Subtotal</th>
-										<td><span class="amount">Rp{{ Cart::subtotal(0, ",", ".") }}</span></td>
-									</tr>
-									<!-- <tr class="cart-subtotal">
-										<th>Tax</th>
-										<td><span class="amount">jnfjk</span></td>
-									</tr> -->
-									<tr class="cart-subtotal">
-										<th>Biaya Pengiriman</th>
-										<td><select id="shipping-cost-option" required name="shipping_service">
-											
-										</select></td>
-									</tr>
-									<tr class="order-total">
-										<th>Total Pesanan</th>
-										<td><strong>Rp<span class="total-amount">{{ Cart::subtotal(0, ",", ".") }}</span></strong>
-										</td>
-									</tr>								
-								</tfoot>
+							@forelse ($items as $item)
+								@php
+									// Ambil data produk utama (jika ada produk induk)
+									$product = isset($item->model->parent) ? $item->model->parent : $item->model;
+									$price = $product->final_price ?? $product->price; // Gunakan final_price jika ada, jika tidak gunakan price
+								@endphp
+								<tr class="cart_item">
+									<td class="product-name">
+										{{ $item->name }} <strong class="product-quantity"> × {{ $item->qty }}</strong>
+									</td>
+									<td class="product-total">
+										<span class="amount">Rp{{ number_format($price * $item->qty, 0, ",", ".") }}</span>
+									</td>
+								</tr>
+							@empty
+								<tr>
+									<td colspan="2">Keranjang Kosong</td>
+								</tr>
+							@endforelse
+						</tbody>
+						<tfoot>
+							@php
+								$subtotal = 0;
+								foreach ($items as $item) {
+									$product = isset($item->model->parent) ? $item->model->parent : $item->model;
+									$price = $product->final_price ?? $product->price; // Gunakan final_price jika ada, jika tidak gunakan price
+									$subtotal += $price * $item->qty;
+								}
+							@endphp
+							<tr class="cart-subtotal">
+								<th>Subtotal</th>
+								<td><span class="amount">Rp{{ number_format($subtotal, 0, ",", ".") }}</span></td>
+							</tr>
+							<tr class="cart-subtotal">
+								<th>Biaya Pengiriman</th>
+								<td>
+									<select id="shipping-cost-option" required name="shipping_service">
+										<!-- Shipping options diisi sesuai dengan implementasi -->
+									</select>
+								</td>
+							</tr>
+							<tr class="order-total">
+								<th>Total Pesanan</th>
+								<td><strong>Rp<span class="total-amount">{{ number_format($subtotal, 0, ",", ".") }}</span></strong></td>
+							</tr>
+						</tfoot>
+
 							</table>
 						</div>
 						<div class="payment-method">

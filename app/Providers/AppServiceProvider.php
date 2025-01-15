@@ -5,6 +5,7 @@ namespace App\Providers;
 use Illuminate\Pagination\Paginator;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\URL;
+use Barryvdh\DomPDF\ServiceProvider as DomPDFServiceProvider;  // Add this line
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -15,7 +16,8 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        //
+        // Register DomPDF service provider manually (for older Laravel versions)
+        $this->app->register(DomPDFServiceProvider::class);
     }
 
     /**
@@ -31,4 +33,4 @@ class AppServiceProvider extends ServiceProvider
         //     URL::forceScheme('https');
         // }
     }
-}    
+}

@@ -132,18 +132,27 @@
                                     @endif
                                 </a>
                                 <div class="product-action">
-                                    <a class="quick-view-btn" title="Lihat" product-slug="{{ $product->slug }}">
+                                    <!-- <a class="quick-view-btn" title="Lihat" product-slug="{{ $product->slug }}">
                                         <i class="pe-7s-look"></i> QUICK VIEW
-                                    </a>
+                                    </a> -->
                                 </div>
                             </div>
                             <div class="furniture-product-content text-center">
                                 <h4><a href="{{ url('product/'. $product->slug) }}">{{ $product->name }}</a></h4>
                                 <div class="price">
-                                    <span class="discount-price">IDR{{ number_format($product->priceLabel() * 0.8, 0, ",", ".") }},00</span>
-                                    <span class="original-price">IDR{{ number_format($product->priceLabel(), 0, ",", ".") }},00</span>
-                                </div>
-                                                    <div class="rating">
+                                @if(!empty($product->final_price) && $product->final_price < $product->price)
+                                <span class="discount-price">IDR {{ number_format($product->final_price, 0, ",", ".") }}
+                                </span>
+                                @else
+                                <span class="discount-price">
+                                 IDR {{ number_format($product->price, 0, ",", ".") }}
+                                 </span>                 
+                                 @endif
+                                 <span class="original-price" style="text-decoration: line-through; color: #a9a9a9;">
+                                    IDR {{ number_format($product->price, 0, ",", ".") }}
+                                </span>
+                                </div> 
+                                <div class="rating">
                                 <i class="fas fa-star"></i>
                                 <i class="fas fa-star"></i>
                                 <i class="fas fa-star"></i>
@@ -189,18 +198,27 @@
                                     @endif
                                 </a>
                                 <div class="product-action">
-                                    <button class="quick-view-btn" title="Lihat" product-slug="{{ $product->slug }}">
+                                    <!-- <button class="quick-view-btn" title="Lihat" product-slug="{{ $product->slug }}">
                                         <i class="pe-7s-look"></i> QUICK VIEW
-                                    </button>
+                                    </button> -->
                                 </div>
                             </div>
                             <div class="furniture-product-content text-center">
                                 <h4><a href="{{ url('product/'. $product->slug) }}">{{ $product->name }}</a></h4>
                                 <div class="price">
-                                    <span class="discount-price">IDR{{ number_format($product->priceLabel() * 0.8, 0, ",", ".") }},00</span>
-                                    <span class="original-price">IDR{{ number_format($product->priceLabel(), 0, ",", ".") }},00</span>
+                                @if(!empty($product->final_price) && $product->final_price < $product->price)
+                                <span class="discount-price">IDR {{ number_format($product->final_price, 0, ",", ".") }}
+                                </span>
+                                @else
+                                <span class="discount-price">
+                                 IDR {{ number_format($product->price, 0, ",", ".") }}
+                                 </span>                 
+                                 @endif
+                                 <span class="original-price" style="text-decoration: line-through; color: #a9a9a9;">
+                                    IDR {{ number_format($product->price, 0, ",", ".") }}
+                                </span>
                                 </div>
-                                                    <div class="rating">
+                                 <div class="rating">
                                 <i class="fas fa-star"></i>
                                 <i class="fas fa-star"></i>
                                 <i class="fas fa-star"></i>
@@ -209,7 +227,7 @@
 
                                 </div>
 
-                                <button class="add-to-cart-btn">
+                                <button class="add-to-cart-btn add-to-card" title="Tambahkan Keranjag" href="" product-id="{{ $product->id }}" product-type="{{ $product->type }}" product-slug="{{ $product->slug }}">
                                 <i class="fas fa-cart-plus"></i> Add to Cart
                                 </button>
                             </div>
@@ -246,19 +264,27 @@
                                     @endif
                                 </a>
                                 <div class="product-action">
-                                    <button class="quick-view-btn" title="Lihat" product-slug="{{ $product->slug }}">
+                                    <!-- <button class="quick-view-btn" title="Lihat" product-slug="{{ $product->slug }}">
                                         <i class="pe-7s-look"></i> QUICK VIEW
-                                    </button>
+                                    </button> -->
                                 </div>
                             </div>
                             <div class="furniture-product-content text-center">
                                 <h4><a href="{{ url('product/'. $product->slug) }}">{{ $product->name }}</a></h4>
                                 <div class="price">
-    <span class="discount-price">IDR{{ number_format($product->priceLabel(), 0, ",", ".") }},00</span>
-    <span class="original-price">IDR{{ number_format($product->priceLabel() + 23000, 0, ",", ".") }},00</span>
-</div>
-
-                                                    <div class="rating">
+                                @if(!empty($product->final_price) && $product->final_price < $product->price)
+                                <span class="discount-price">IDR {{ number_format($product->final_price, 0, ",", ".") }}
+                                </span>
+                                @else
+                                <span class="discount-price">
+                                 IDR {{ number_format($product->price, 0, ",", ".") }}
+                                 </span>                 
+                                 @endif
+                                 <span class="original-price" style="text-decoration: line-through; color: #a9a9a9;">
+                                    IDR {{ number_format($product->price, 0, ",", ".") }}
+                                </span>
+                                </div>
+                                <div class="rating">
                                 <i class="fas fa-star"></i>
                                 <i class="fas fa-star"></i>
                                 <i class="fas fa-star"></i>
@@ -267,7 +293,7 @@
 
                                 </div>
 
-                                <button class="add-to-cart-btn">
+                                <button class="add-to-cart-btn add-to-card" title="Tambahkan Keranjag" href="" product-id="{{ $product->id }}" product-type="{{ $product->type }}" product-slug="{{ $product->slug }}">
                                 <i class="fas fa-cart-plus"></i> Add to Cart
                                 </button>
                             </div>

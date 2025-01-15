@@ -124,25 +124,41 @@ class ProductController extends Controller
      * Store a newly created resource in storage.
      */
     public function store(ProductRequest $request)
-    {
-        $product = DB::transaction(
-			function () use ($request) {
-				$categoryIds = !empty($request['category_id']) ? $request['category_id'] : [];
-				$product = Product::create($request->validated() + ['user_id' => auth()->id()]);
-				$product->categories()->sync($categoryIds);
-
-				if ($request['type'] == 'configurable') {
-					$this->_generateProductVariants($product, $request);
-				}
-				return $product;
-			}
-        );
+{
+    $product = DB::transaction(function () use ($request) {
+        $categoryIds = !empty($request['category_id']) ? $request['category_id'] : [];
         
-        return redirect()->route('admin.products.edit', $product)->with([
-            'message' => 'Berhasil di buat !',
-            'alert-type' => 'success'
+        // Hitung harga setelah diskon
+        $finalPrice = $request->price;
+
+        if ($request->discount_type === 'percentage') {
+            $finalPrice -= $request->price * ($request->discount_value / 100);
+        } elseif ($request->discount_type === 'fixed') {
+            $finalPrice -= $request->discount_value;
+        }
+
+        // Simpan produk dengan final_price
+        $product = Product::create($request->validated() + [
+            'user_id' => auth()->id(),
+            'discount_type' => $request->input('discount_type', null),
+            'discount_value' => $request->input('discount_value', 0),
+            'final_price' => $finalPrice, // Simpan harga akhir
         ]);
-    } 
+
+        $product->categories()->sync($categoryIds);
+        
+        if ($request['type'] == 'configurable') {
+            $this->_generateProductVariants($product, $request);
+        }
+        
+        return $product;
+    });
+
+    return redirect()->route('admin.products.edit', $product)->with([
+        'message' => 'Berhasil di buat!',
+        'alert-type' => 'success'
+    ]);
+}
 
     /**
      * Display the specified resource.
@@ -184,29 +200,42 @@ class ProductController extends Controller
      * Update the specified resource in storage.
      */
     public function update(ProductRequest $request, Product $product)
-    {
-        $saved = false;
-		$saved = DB::transaction(
-			function () use ($product, $request) {
-				$categoryIds = !empty($request['category_id']) ? $request['category_id'] : [];
-				$product->update($request->validated());
-				$product->categories()->sync($categoryIds);
+{
+    $saved = DB::transaction(function () use ($product, $request) {
+        $categoryIds = !empty($request['category_id']) ? $request['category_id'] : [];
 
-				if ($product->type == 'configurable') {
-					$this->_updateProductVariants($request);
-				} else {
-					ProductInventory::updateOrCreate(['product_id' => $product->id], ['qty' => $request['qty']]);
-				}
+        // Hitung harga setelah diskon
+        $finalPrice = $request->price;
 
-				return true;
-			}
-        );
-        
-        return redirect()->route('admin.products.index')->with([
-            'message' => 'Berhasil di ganti !',
-            'alert-type' => 'info'
+        if ($request->discount_type === 'percentage') {
+            $finalPrice -= $request->price * ($request->discount_value / 100);
+        } elseif ($request->discount_type === 'fixed') {
+            $finalPrice -= $request->discount_value;
+        }
+
+        // Perbarui data produk
+        $product->update($request->validated() + [
+            'discount_type' => $request->input('discount_type', null),
+            'discount_value' => $request->input('discount_value', 0),
+            'final_price' => $finalPrice, // Simpan harga akhir
         ]);
-    }
+
+        $product->categories()->sync($categoryIds);
+        
+        if ($product->type == 'configurable') {
+            $this->_updateProductVariants($request);
+        } else {
+            ProductInventory::updateOrCreate(['product_id' => $product->id], ['qty' => $request['qty']]);
+        }
+        
+        return true;
+    });
+
+    return redirect()->route('admin.products.index')->with([
+        'message' => 'Berhasil di ganti!',
+        'alert-type' => 'info'
+    ]);
+}
 
     /**
      * Remove the specified resource from storage.

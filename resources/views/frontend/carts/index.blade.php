@@ -46,20 +46,30 @@
 												<a href="{{ url('product/'. $product->slug) }}"><img src="{{ $image }}" alt="{{ $product->name }}" style="width:100px"></a>
 											</td>
 											<td class="product-name"><a href="{{ url('product/'. $product->slug) }}">{{ $item->name }}</a></td>
-											<td class="product-price-cart"><span class="amount">IDR {{ number_format($item->price, 0, ",", ".") }},00</span></td>
-											<td class="product-quantity">
-											<select
-												className="form-control"
-												id="change-qty"
-												data-productId="{{ $item->rowId }}"
-                                                value="{{ $item->qty }}"
-                                            >
-												@foreach(range(1, $item->model->productInventory->qty) as $qty)
-													<option {{ $qty == $item->qty ? 'selected' : null }} value="{{ $qty }}">{{ $qty }}</option>
-												@endforeach
-                                            </select>
+											@php
+											$finalPrice = $product->final_price ?? $product->price;
+											@endphp
+
+											<td class="product-price-cart">
+												<span class="amount">IDR {{ number_format($finalPrice, 0, ",", ".") }},00</span>
 											</td>
-											<td class="product-subtotal">IDR {{ number_format($item->price * $item->qty, 0, ",", ".")}},00</td>
+											<td class="product-quantity">
+											<div class="quantity d-flex align-items-center">
+												<button class="btn-qty decrease" data-productid="{{ $item->rowId }}">-</button>
+												<input
+													type="text"
+													class="form-control text-center qty-input"
+													value="{{ $item->qty }}"
+													data-productid="{{ $item->rowId }}"
+													readonly
+													style="width: 50px;"
+												/>
+												<button class="btn-qty increase" data-productid="{{ $item->rowId }}">+</button>
+											</div>
+										</td>
+
+										<td class="product-subtotal">IDR {{ number_format($finalPrice * $item->qty, 0, ",", ".") }},00</td>
+
 											<td class="product-remove">
 												<a href="{{ url('carts/remove/'. $item->rowId)}}" class="delete"><i class="pe-7s-trash"></i></a>
 											</td>
@@ -85,10 +95,19 @@
 							<div class="col-md-5 ml-auto">
 								<div class="cart-page-total">
 									<h2>Total Keranjang</h2>
+									@php
+									$total = 0;
+									foreach ($items as $item) {
+										$product = isset($item->model->parent) ? $item->model->parent : $item->model;
+										$finalPrice = $product->final_price ?? $product->price;
+										$total += $finalPrice * $item->qty;
+									}
+									@endphp
 									<ul>
-										<li>Total<span>Rp{{ Cart::subtotal(0, ",", ".") }}</span></li>
-										<!-- <li>Total<span>Rp{{ Cart::total(0, ",", ".") }}</span></li> -->
+										<li>Total<span>IDR {{ number_format($total, 0, ",", ".") }}</span></li>
 									</ul>
+
+
 									<a href="{{ url('orders/checkout') }}">Checkout</a>
 								</div>
 							</div>

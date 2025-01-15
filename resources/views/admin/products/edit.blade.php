@@ -77,7 +77,7 @@
                         @endif
 
                         <div class="form-group row border-bottom pb-4">
-                            <label for="short_description" class="col-sm-2 col-form-label">Deskripsi Singkat</label>
+                            <label for="short_description" class="col-sm-2 col-form-label">Indikasi Penggunaan</label>
                             <div class="col-sm-10">
                               <textarea class="form-control" name="short_description" id="short_description" cols="30" rows="5">{{ old('short_description', $product->short_description) }}</textarea>
                             </div>
@@ -98,6 +98,23 @@
                               </select>
                             </div>
                         </div>
+                        <div class="form-group row border-bottom pb-4">
+    <label for="discount_type" class="col-sm-2 col-form-label">Tipe Diskon</label>
+    <div class="col-sm-10">
+        <select class="form-control" name="discount_type" id="discount_type">
+            <option value="">Tanpa Diskon</option>
+            <option value="percentage" {{ old('discount_type', $product->discount_type ?? '') == 'percentage' ? 'selected' : '' }}>Persentase</option>
+            <option value="fixed" {{ old('discount_type', $product->discount_type ?? '') == 'fixed' ? 'selected' : '' }}>Nominal</option>
+        </select>
+    </div>
+</div>
+<div class="form-group row border-bottom pb-4">
+    <label for="discount_value" class="col-sm-2 col-form-label">Nilai Diskon</label>
+    <div class="col-sm-10">
+        <input type="number" class="form-control" name="discount_value" value="{{ old('discount_value', $product->discount_value ?? '') }}" id="discount_value">
+    </div>
+</div>
+
                     @endif
                     <button type="submit" class="btn btn-success">Save</button>
                 </form>

@@ -1,13 +1,13 @@
 @extends('frontend.layout')
 
 @section('content')
-	<div class="shop-page-wrapper shop-page-padding ptb-100">
-		<div class="container-fluid">
-			<div class="row">
-				<div class="col-lg-3">
-                    @include('frontend.partials.user_menu')
-				</div>
-				<div class="col-lg-9">
+<div class="shop-page-wrapper shop-page-padding ptb-100">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-lg-3">
+                @include('frontend.partials.user_menu')
+            </div>
+            <div class="col-lg-9">
                 @if(session()->has('message'))
                     <div class="content-header mb-3 pb-0">
                         <div class="container-fluid">
@@ -16,53 +16,57 @@
                                 <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                                     <span aria-hidden="true">&times;</span>
                                 </button>
-                            </div> 
-                        </div><!-- /.container-fluid -->
+                            </div>
+                        </div>
                     </div>
                 @endif
-					<div class="shop-product-wrapper res-xl">
-						<div class="table-content table-responsive">
-							<table>
-								<thead>
-									<tr>
-										<th>Hapus</th>
-										<th>Gambar</th>
-										<th>Produk</th>
-										<th>Harga</th>
-									</tr>
-								</thead>
-								<tbody>
-									@forelse ($wishlists as $wishlist)
-										@php
-											$product = $wishlist->product;
-											$product = isset($product->parent) ?: $product;
-											$image = !empty($product->productImages->first()) ? asset('storage/'.$product->productImages->first()->path) : asset('themes/ezone/assets/img/cart/3.jpg')
-										@endphp
-										<tr>
-											<td class="product-remove">
-                                            <form action="{{ route('wishlists.destroy', $wishlist->id) }}" method="post" class="delete d-inline-block">
-                                                @csrf 
-                                                @method('delete')
-                                                <button type="submit" style="background-color: transparent; border-color: #FFF;">X</button>
-                                            </form>
-											</td>
-											<td class="product-thumbnail">
-												<a href="{{ url('product/'. $product->slug) }}"><img src="{{ $image }}" alt="{{ $product->name }}" style="width:100px"></a>
-											</td>
-											<td class="product-name"><a href="{{ url('product/'. $product->slug) }}">{{ $product->name }}</a></td>
-											<td class="product-price-cart"><span class="amount">{{ number_format($product->priceLabel(), 0, ",", ".") }}</span></td>
-										</tr>
-									@empty
-										<tr>
-											<td colspan="4">Kamu tidak memiliki wishlist produk</td>
-										</tr>
-									@endforelse
-                                </tbody>
-							</table>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
-	</div>
+
+                <div class="wishlist-wrapper">
+                    <div class="row">
+                        @forelse ($wishlists as $wishlist)
+                            @php
+                                $product = $wishlist->product;
+                                $product = isset($product->parent) ?: $product;
+                                $image = !empty($product->productImages->first()) ? asset('storage/'.$product->productImages->first()->path) : asset('themes/ezone/assets/img/cart/3.jpg');
+                            @endphp
+
+                            <div class="col-md-3 mb-4">
+                                <div class="product-card2">
+                                    <img src="{{ $image }}" class="card-img-top" alt="{{ $product->name }}">
+                                    <div class="card-body">
+									<div class="furniture-product-content2 text-center">
+                                <h4><a href="{{ url('product/'. $product->slug) }}">{{ $product->name }}</a></h4>
+                                <div class="price">
+                                @if(!empty($product->final_price) && $product->final_price < $product->price)
+                                <span class="discount-price">IDR {{ number_format($product->final_price, 0, ",", ".") }}
+                                </span>
+                                @else
+                                <span class="discount-price">
+                                 IDR {{ number_format($product->price, 0, ",", ".") }}
+                                 </span>                 
+                                 @endif
+                                 <span class="original-price" style="text-decoration: line-through; color: #a9a9a9;">
+                                    IDR {{ number_format($product->price, 0, ",", ".") }}
+                                </span>
+                                </div>
+                                        <form action="{{ route('wishlists.destroy', $wishlist->id) }}" method="post" class="delete d-inline-block">
+                                            @csrf
+                                            @method('delete')
+                                            <button type="submit" class="btn btn-danger btn-sm">Hapus</button>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+							</div>
+                        @empty
+                            <div class="col-12">
+                                <p class="text-center">Kamu tidak memiliki wishlist produk</p>
+                            </div>
+                        @endforelse
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 @endsection

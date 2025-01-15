@@ -41,7 +41,7 @@
                                         <td>{{ $shipment->total_weight }}</td>
                                         <td>
                                             <a href="{{ url('admin/orders/'. $shipment->order->id) }}" class="btn btn-info btn-sm">show</a>      
-                                            <a href="{{ route('admin.shipments.edit', $shipment->id) }}" class="btn btn-warning btn-sm">Edit Resi</a>
+                                            <!-- <a href="{{ route('admin.shipments.edit', $shipment->id) }}" class="btn btn-warning btn-sm">Edit Resi</a> -->
                                         </td>
                                     </tr>
                                 @empty

@@ -18,8 +18,8 @@
                 <form method="post" action="{{ route('admin.products.store') }}">
                     @csrf 
                     <div class="form-group row border-bottom pb-4">
-                        <label for="type" class="col-sm-2 col-form-label">Tipe Kategori</label>
-                        <div class="col-sm-10">
+                        <label for="type" class="col-sm-2 col-form-label">Tipe Kategori</label> 
+                       <div class="col-sm-10">
                           <select class="form-control product-type" name="type" id="type">
                             @foreach($types as $value => $type)
                               <option {{ old('type') == $value ? 'selected' : null }} value="{{ $value }}"> {{ $type }}</option>
@@ -67,6 +67,24 @@
                               </div>
                           </div>
                         @endforeach
+
+                                                      <div class="form-group row border-bottom pb-4">
+                                  <label for="discount_type" class="col-sm-2 col-form-label">Tipe Diskon</label>
+                                  <div class="col-sm-10">
+                                      <select class="form-control" name="discount_type" id="discount_type">
+                                          <option value="">Tanpa Diskon</option>
+                                          <option value="percentage" {{ old('discount_type', $product->discount_type ?? '') == 'percentage' ? 'selected' : '' }}>Persentase</option>
+                                          <option value="fixed" {{ old('discount_type', $product->discount_type ?? '') == 'fixed' ? 'selected' : '' }}>Nominal</option>
+                                      </select>
+                                  </div>
+                              </div>
+                              <div class="form-group row border-bottom pb-4">
+                                  <label for="discount_value" class="col-sm-2 col-form-label">Nilai Diskon</label>
+                                  <div class="col-sm-10">
+                                      <input type="number" class="form-control" name="discount_value" value="{{ old('discount_value', $product->discount_value ?? '') }}" id="discount_value">
+                                  </div>
+                              </div>
+
                       @endif   
                     </div>
                     <button type="submit" class="btn btn-success">Save</button>

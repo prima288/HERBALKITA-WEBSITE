@@ -123,10 +123,19 @@
                             <div class="furniture-product-content2 text-center">
                                 <h4><a href="{{ url('product/'. $product->slug) }}">{{ $product->name }}</a></h4>
                                 <div class="price">
-                                    <span class="discount-price">IDR{{ number_format($product->priceLabel() * 0.8, 0, ",", ".") }},00</span>
-                                    <span class="original-price">IDR{{ number_format($product->priceLabel(), 0, ",", ".") }},00</span>
+                                @if(!empty($product->final_price) && $product->final_price < $product->price)
+                                <span class="discount-price">IDR {{ number_format($product->final_price, 0, ",", ".") }}
+                                </span>
+                                @else
+                                <span class="discount-price">
+                                 IDR {{ number_format($product->price, 0, ",", ".") }}
+                                 </span>                 
+                                 @endif
+                                 <span class="original-price" style="text-decoration: line-through; color: #a9a9a9;">
+                                    IDR {{ number_format($product->price, 0, ",", ".") }}
+                                </span>
                                 </div>
-                                                    <div class="rating">
+                                <div class="rating">
                                 <i class="fas fa-star"></i>
                                 <i class="fas fa-star"></i>
                                 <i class="fas fa-star"></i>
@@ -136,7 +145,7 @@
                                 </div>
 
                                 <button class="add-to-cart-btn">
-                                <i class="fas fa-cart-plus"></i> Add to Cart
+                                <i class="fas fa-cart-plus"></i> Tambahkan Keranjang
                                 </button>
                             </div>
                         </div>

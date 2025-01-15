@@ -38,7 +38,7 @@
 
         <header>
     <!-- Navbar Atas (Logo, Search Bar, User Icons) -->
-    <div class="header-top" style="background-color: #f57f17; padding: 10px 0;">
+    <div class="header-top" style="background-color: #f57f17; padding: 10px 0; flex-wrap: wrap; width: 100%;">
         <div class="container-fluid">
             <div class="header-top-wrapper d-flex align-items-center justify-content-between">
                 
@@ -144,7 +144,7 @@
     </div>
 
     <!-- Navbar Bawah (Kategori) -->
-    <div class="header-bottom" style="background-color: #e5e9ed; padding: 15px 0; border-bottom: 1px solid #ddd;">
+    <div class="header-bottom" style="background-color: #e5e9ed; padding: 15px 0; border-bottom: 1px solid #ddd; width: 100%;">
         <div class="container-fluid">
             <nav class="menu-style">
                 <ul style="display: flex; gap: 30px; list-style: none; padding: 0; margin: 0;">

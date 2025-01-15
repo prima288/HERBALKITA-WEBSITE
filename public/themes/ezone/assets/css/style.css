@@ -6420,7 +6420,7 @@ a.icon-cart-furniture.food-cart span {
 /*--------- 13. Login page ---------*/
 .login-form-container {
     background: transparent none repeat scroll 0 0;
-    border: 1px solid #ddd;
+    border: 0px solid #ddd;
     padding: 60px 40px;
     text-align: left;
 }
@@ -6478,22 +6478,25 @@ a.icon-cart-furniture.food-cart span {
     color: #000;
 }
 .button-box .default-btn {
-    background: transparent none repeat scroll 0 0;
-    border: 1px solid #ddd;
-    color: #777;
-    font-size: 14px;
+    background-color: #ff6a00; /* Warna oranye seperti Guardian */
+    border: 5px solid #ff6a00; /* Border 5px dengan warna oranye */
+    color: #fff; /* Teks berwarna putih */
+    font-size: 17px;
+    font-weight: 200PX; /* Regular font weight */
     line-height: 1;
     margin-top: 25px;
-    padding: 12px 36px 10px;
+    padding: 12px 250px; /* Agar tombol lebih panjang */
     text-transform: uppercase;
-    transition: all 0.3s ease 0s;
-    border-radius: 50px;
+    transition: all 0.3s ease;
+    border-radius: 5px; /* Radius 5px untuk sudut yang lebih tajam */
 }
+
 .button-box .default-btn:hover {
-    background-color: #050035;
-    border: 1px solid #050035;
+    background-color: #e65c00; /* Sedikit perubahan warna saat hover */
+    border: 5px solid #e65c00; /* Menyesuaikan warna border saat hover */
     color: #fff;
 }
+
 /*-------- 14. Shopping cart ----------*/
 h1.cart-heading {
     font-size: 1.5rem;
@@ -6510,38 +6513,66 @@ h1.cart-heading {
     margin: 0;
     text-transform: uppercase;
 }
+/* Style untuk tabel minimalis */
 .table-content table {
-    width: 100%;
-    border-collapse:
-     collapse;
+    table-layout: fixed; /* Membuat kolom tabel memiliki lebar tetap */
+    width: 100%; /* Menjamin tabel menggunakan seluruh lebar yang tersedia */
+    border-collapse: collapse; /* Menyembunyikan jarak antar border kolom */
+    margin: 20px 0;
+    background: #ffffff;
+    font-size: 14px;
 }
 
-.table-content tbody tr:last-child {
-    border-bottom: none;
-}
-.wishlist .table-content table {
-    margin: 0 0 0px;
-}
-.table-content.wish table {
-    margin: 0 0 0px;
-}
-.table-content table th {
-    border-top: medium none;
-    color: #555;
+
+.table-content table thead th {
+    background: #fff; /* Warna latar header */
+    color: #333;
     font-size: 16px;
-    font-weight: normal;
-    padding: 15px 10px 12px;
-    text-align: center;
+    font-weight: bold;
     text-transform: uppercase;
-    vertical-align: middle;
-    white-space: nowrap;
+    padding: 15px;
+    text-align: center;
+    border-bottom: 2px solid #ddd; /* Border bawah header */
 }
+
+.table-content table tbody tr {
+    border-bottom: 0.5px solid #ddd; /* Garis pembatas antar baris */
+}
+
+.table-content table tbody tr:last-child {
+    border-bottom: none; /* Hapus border pada baris terakhir */
+}
+
 .table-content table td {
-    border-top: medium none;
-    padding: 40px 10px;
-    vertical-align: middle;
-    font-size: 13px;
+    text-align: center;
+    padding: 20px;
+    font-size: 14px;
+    color: #555;
 }
+
+.table-content table td a.btn {
+    padding: 8px 15px;
+    background-color: #FF8300; /* Warna tombol */
+    color: #fff;
+    border-radius: 5px;
+    font-size: 12px;
+    text-decoration: none;
+    transition: background-color 0.3s;
+}
+
+.table-content table td a.btn:hover {
+    background-color: #e67300; /* Warna hover tombol */
+}
+
+/* Responsif untuk layar kecil */
+@media (max-width: 768px) {
+    .table-content table td,
+    .table-content table th {
+        font-size: 12px; /* Font lebih kecil */
+        padding: 10px;
+    }
+}
+
 .table-content table td input {
     background: #e5e5e5 none repeat scroll 0 0;
     border: medium none;
@@ -6854,12 +6885,15 @@ p.checkout-coupon input[type="submit"] {
 .checkout-form-list input[type=text],
 .checkout-form-list input[type=password],
 .checkout-form-list input[type=email] {
-    background: #fff none repeat scroll 0 0;
-    border: 1px solid #e5e5e5;
-    border-radius: 0;
-    height: 42px;
+    border: none;
+    border-bottom: 1px solid #000;
+    background: none;
     width: 100%;
-    padding: 0 0 0 10px;
+    padding: 8px 10px;
+    font-size: 14px;
+    outline: none;
+    border-radius: 0; /* Menghilangkan efek radius */
+    transition: border-color 0.3s ease;
 }
 .checkout-form-list input[type="checkbox"] {
     display: inline-block;
@@ -9943,7 +9977,20 @@ input.form-control:focus {
     gap: 10px; /* Memberi jarak antar produk */
 }
 
+.product-card3 {
+    border: 0px solid #f0f0f0;
+    padding: 10px; /* Menambah padding untuk memperbesar ukuran dalam card */
+    border-radius: 10px;
+    background-color: #fff;
+    position: relative;
+    height: 400px; /* Atur tinggi card sesuai keinginan */
+    transition: box-shadow 0.3s ease; /* Tambahkan transisi agar efek bayangan lebih halus */
 
+}
+.product-card3:hover {
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2); /* Efek shadow saat di-hover */
+    transform: translateY(0px); /* Opsional: menambahkan sedikit efek naik */
+}
 
 .product-card {
     border: 0px solid #f0f0f0;
@@ -10079,8 +10126,10 @@ input.form-control:focus {
 
 /*index produk*/
 .shop-product-wrapper {
-    overflow: visible; /* Pastikan elemen tidak memotong konten */
-    height: auto; /* Biarkan tinggi menyesuaikan konten */
+    overflow: hidden; /* Hilangkan scroll */
+    margin: 0 auto; /* Pusatkan elemen */
+    width: 100%; /* Pastikan lebarnya maksimal */
+    text-align: center; /* Teks dalam konten diatur rata tengah */
 }
 
 .shop-product-content {
@@ -10092,7 +10141,7 @@ input.form-control:focus {
     display: flex;
     flex-wrap: wrap; /* Pastikan elemen membungkus ke bawah */
     gap: 20px; /* Memberikan jarak antar produk */
-    justify-content: space-between;
+    justify-content: flex-start;
 }
 
 .col-md-6.col-xl-4 {
@@ -10151,7 +10200,7 @@ input.form-control:focus {
     line-height: 1.2;
     margin-bottom: 10px;
     display: -webkit-box;
-    -webkit-line-clamp: 2; /* Batasi jumlah baris */
+    -webkit-line-clamp: 1; /* Batasi jumlah baris */
     -webkit-box-orient: vertical;
     overflow: hidden;
     text-align: left;

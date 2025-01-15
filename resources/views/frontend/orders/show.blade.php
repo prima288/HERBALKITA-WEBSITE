@@ -8,10 +8,16 @@
 				<div class="col-lg-3">
 					@include('frontend.partials.user_menu')
 				</div>
+				
 				<div class="col-lg-9">
 					<div class="d-flex justify-content-between">
 						<h2 class="text-dark font-weight-medium">ID Pesanan #{{ $order->code }}</h2>
+						<a href="{{ url('orders/invoice/' . $order->id . '/generate') }}" class="btn btn-primary btn-sm">Download</a>
+						<a href="{{ url('orders/invoice/' . $order->id) }}" target="_blank" class="btn btn-warning btn-sm">View</a>
+
+
 					</div>
+					
 					<div class="row pt-5">
 						<div class="col-xl-4 col-lg-4">
 							<p class="text-dark mb-2" style="font-weight: normal; font-size:16px; text-transform: uppercase;">Billing Address</p>

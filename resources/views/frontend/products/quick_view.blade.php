@@ -79,7 +79,7 @@
 								<input type="number" name="qty" value="1" class="cart-plus-minus-box" min="1">
 							</div>
 							<div class="quickview-btn-cart">
-								<button type="submit" class="submit contact-btn btn-hover">add to cart</button>
+								<button type="submit" class="submit contact-btn btn-hover">Tambahkan Keranjang</button>
 							</div>
 							<div class="quickview-btn-wishlist">
 								<a class="btn-hover" href="#"><i class="pe-7s-like"></i></a>

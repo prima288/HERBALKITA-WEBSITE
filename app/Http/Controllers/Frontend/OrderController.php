@@ -2,14 +2,17 @@
 
 namespace App\Http\Controllers\Frontend;
 
+
 use App\Models\Order;
 use App\Models\Payment;
 use App\Models\Shipment;
 use App\Models\OrderItem;
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
 use App\Models\ProductInventory;
 use App\Http\Controllers\Controller;
 use Gloudemans\Shoppingcart\Facades\Cart;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 class OrderController extends Controller
 {
@@ -126,13 +129,20 @@ class OrderController extends Controller
 		$message = null;
 		$data = [];
 		if ($selectedShipping) {
-			$status = 200;
-			$message = 'Success set shipping cost';
-			$data['total'] = (int)Cart::subtotal(0,'','') + $selectedShipping['cost'];
+			// Hitung subtotal menggunakan final_price atau price
+			$subtotal = 0;
+			foreach (Cart::content() as $item) {
+				$finalPrice = $item->model->final_price ?? $item->price;
+				$subtotal += $finalPrice * $item->qty;
+			}
+		
+			// Total adalah subtotal + biaya pengiriman
+			$data['total'] = $subtotal + $selectedShipping['cost'];
 		} else {
 			$status = 400;
 			$message = 'Failed to set shipping cost';
 		}
+		
 
 		$response = [
 			'status' => $status,
@@ -211,7 +221,13 @@ class OrderController extends Controller
 		$destination = !isset($params['ship_to']) ? $params['shipping_city_id'] : $params['customer_shipping_city_id'];
 		$selectedShipping = $this->_getSelectedShipping($destination, $this->_getTotalWeight(), $params['shipping_service']);
 		
-		$baseTotalPrice = (int)Cart::subtotal(0,'','');
+		// Hitung total harga dari final_price di cart items, fallback ke price jika final_price tidak ada
+		$baseTotalPrice = 0;
+
+		foreach (Cart::content() as $item) {
+		$finalPrice = $item->model->final_price ?? $item->price;
+		$baseTotalPrice += $item->qty * $finalPrice;
+			}
 		$taxAmount = 0;
 		$taxPercent = 0;
 		$shippingCost = $selectedShipping['cost'];
@@ -277,8 +293,12 @@ class OrderController extends Controller
 				$itemTaxPercent = 0;
 				$itemDiscountAmount = 0;
 				$itemDiscountPercent = 0;
-				$itemBaseTotal = $item->qty * $item->price;
+				// Ambil final_price dari model, fallback ke price jika final_price tidak tersedia
+				$finalPrice = $item->model->final_price ?? $item->price;
+
+				$itemBaseTotal = $item->qty * $finalPrice;
 				$itemSubTotal = $itemBaseTotal + $itemTaxAmount - $itemDiscountAmount;
+
 
 				$product = isset($item->model->parent) ? $item->model->parent : $item->model;
 
@@ -286,8 +306,8 @@ class OrderController extends Controller
 					'order_id' => $order->id,
 					'product_id' => $item->model->id,
 					'qty' => $item->qty,
-					'base_price' => $item->price,
-					'base_total' => $itemBaseTotal,
+					'base_price' => $item->model->final_price ?? $item->price, // Ambil dari final_price atau fallback ke price
+   					'base_total' => ($item->model->final_price ?? $item->price) * $item->qty, // Sesuaikan base_total juga
 					'tax_amount' => $itemTaxAmount,
 					'tax_percent' => $itemTaxPercent,
 					'discount_amount' => $itemDiscountAmount,
@@ -388,4 +408,20 @@ class OrderController extends Controller
 		return view('frontend.orders.received', compact('order'));
 	}
 
-}
+	public function viewInvoice($orderId)
+	{
+		$order = Order::findOrFail($orderId); // Hapus tanda kutip
+		return view('frontend.invoice.generate-invoice', compact('order'));
+	}
+	
+	public function generateInvoice($orderId)
+	{
+		$order = Order::findOrFail($orderId); // Hapus tanda kutip
+		$data = ['order' => $order];
+	
+		$pdf = Pdf::loadView('frontend.invoice.generate-invoice', $data);
+	
+		$todayDate = Carbon::now()->format('d-m-Y');
+		return $pdf->download('invoice '.$order->code.'-'.$todayDate.'.pdf');
+	}
+}	

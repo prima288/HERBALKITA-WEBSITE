@@ -21,16 +21,24 @@
                             </div><!-- /.container-fluid -->
                         </div>
                     @endif
-					<div class="login">
-						<div class="login-form-container">
+
+
+					<div class="login"  style="margin-left: 250px">
+					<div class="row">
+                            <div class="col-md-7">
+                                <h4 class="font-weight-bold mb-4">INFORMASI AKUN</h4> <!-- Menambahkan teks di samping form -->
+                            </div>
+                            <div class="col-md-10">
+						<div class="login-form-container";>
 							<div class="login-form">
                                     <form action="{{ url('profile') }}" method="post">
 									@csrf
                                     @method('put')
+
 									<div class="form-group row">
-										<div class="col-md-6">
+										<div class="col-md-10">
                                             <div class="checkout-form-list">
-                                                <label>Nama Pertama <span class="required">*</span></label>										
+                                                <label>NAMA DEPAN <span class="required">*</span></label>										
                                                 <input type="text" name="first_name" value="{{ old('first_name', auth()->user()->first_name) }}">
                                             </div>
 											@error('first_name')
@@ -39,9 +47,9 @@
 												</span>
 											@enderror
 										</div>
-										<div class="col-md-6">
+										<div class="col-md-10">
                                             <div class="checkout-form-list">
-                                                <label>Nama Akhir <span class="required">*</span></label>										
+                                                <label>NAMA BELAKANG <span class="required">*</span></label>										
                                                 <input type="text" name="last_name" value="{{ old('last_name', auth()->user()->last_name) }}">
                                             </div>
                                             @error('last_name')
@@ -53,9 +61,9 @@
 									</div>
 
 									<div class="form-group row">
-										<div class="col-md-12">
+										<div class="col-md-10">
                                             <div class="checkout-form-list">
-                                                <label>Address <span class="required">*</span></label>
+                                                <label>ALAMAT <span class="required">*</span></label>
                                                 <input type="text" name="address1" value="{{ old('address1') }}">
                                             </div>
                                             @error('address1')
@@ -67,7 +75,7 @@
 									</div>
 
 									<div class="form-group row">
-										<div class="col-md-12">
+										<div class="col-md-10">
                                             <div class="checkout-form-list">
                                                 <input type="text" name="address2" value="{{ old('address2', auth()->user()->address2) }}">
                                             </div>
@@ -80,8 +88,8 @@
 									</div>
 
 									<div class="form-group row">
-										<div class="col-md-6">
-                                            <label>Provinsi<span class="required">*</span></label>
+										<div class="col-md-10">
+                                            <label>PROVINSI<span class="required">*</span></label>
                                             <select name="province_id" id="shipping-province">
                                                 @foreach($provinces as $id => $province)
                                                     <option value="{{ $id }}">{{ $province }}</option>
@@ -93,8 +101,8 @@
 												</span>
 											@enderror
 										</div>
-										<div class="col-md-6">
-                                            <label>City<span class="required">*</span></label>
+										<div class="col-md-10">
+                                            <label>KOTA<span class="required">*</span></label>
                                             <select name="city_id" id="city_id">
                                                 @foreach($cities as $id => $city)
                                                     <option value="{{ $id }}">{{ $city }}</option>
@@ -109,9 +117,9 @@
 									</div>
 
 									<div class="form-group row">
-										<div class="col-md-6">
+										<div class="col-md-10">
                                             <div class="checkout-form-list">
-                                                <label>Postcode / Zip <span class="required">*</span></label>										
+                                                <label>KODE POS<span class="required">*</span></label>										
                                                 <input type="text" name="postcode" value="{{ old('postcode', auth()->user()->postcode) }}">
                                             </div>
                                             @error('postcode')
@@ -120,9 +128,9 @@
 												</span>
 											@enderror
 										</div>
-										<div class="col-md-6">
+										<div class="col-md-10">
                                             <div class="checkout-form-list">
-                                                <label>Phone  <span class="required">*</span></label>										
+                                                <label>NOMOR WHATSAPP  <span class="required">*</span></label>										
                                                 <input type="text" name="phone" value="{{ old('phone', auth()->user()->phone) }}">
                                             </div>
 											@error('phone')
@@ -134,7 +142,7 @@
 									</div>
 
 									<div class="form-group row">
-										<div class="col-md-12">
+										<div class="col-md-10">
                                             <input type="email" value="{{ old('email', auth()->user()->email) }}" class="form-control" placeholder="Email">
 											@error('email')
 												<span class="invalid-feedback" role="alert">
@@ -144,10 +152,12 @@
 										</div>
 									</div>
 									<div class="button-box">
-										<button type="submit" class="default-btn floatright">Update Profile</button>
+										<button type="submit" class="default-btn floatright">SIMPAN</button>
 									</div>
 								</form>
 							</div>
+						</div>
+						</div>
 						</div>
 					</div>
 				</div>
